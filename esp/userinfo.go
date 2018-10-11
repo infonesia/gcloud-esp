@@ -24,7 +24,11 @@ func User(r *http.Request) (*UserData, error) {
 	if encodedData == "" {
 		return nil, errNoUserInfo
 	}
-
+	encodedData = strings.Replace(encodedData, "-", "+", -1)
+	encodedData = strings.Replace(encodedData, "_", "/", -1)
+	for len(encodedData)%4 != 0 {
+		encodedData += "="
+	}
 	decodedData, err := base64.StdEncoding.DecodeString(encodedData)
 	if err != nil {
 		return nil, err
